@@ -54,6 +54,7 @@
     ncurses
     openssh
     osctl
+    osctl-env-exec
     osctl-image
     osctl-repo
     osup
