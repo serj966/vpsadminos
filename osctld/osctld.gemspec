@@ -26,5 +26,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'ipaddress', '~> 0.8.3'
   s.add_runtime_dependency 'libosctl', s.version
   s.add_runtime_dependency 'ruby-lxc', '~> 1.2.2'
-  s.add_development_dependency 'yard'
+  s.add_runtime_dependency 'yard'
 end

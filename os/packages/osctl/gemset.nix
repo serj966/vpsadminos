@@ -1,4 +1,13 @@
 {
+  binman = {
+    dependencies = ["opener"];
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "1wn4myh5ir80j6xmvrbz6hrq47m9p4l6yd6nyk1g1r9klds52yvn";
+      type = "gem";
+    };
+    version = "5.1.0";
+  };
   curses = {
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
@@ -39,14 +48,47 @@
     };
     version = "2.1.0";
   };
-  osctl = {
-    dependencies = ["curses" "gli" "highline" "ipaddress" "json" "ruby-progressbar"];
+  md2man = {
+    dependencies = ["binman" "redcarpet" "rouge"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "11rlhx0a4nag0b51j1d82hddnmkacdh1rs64ah7w9d5kk16f2sb1";
+      sha256 = "0ii25vxasg3fm93wa2cabl4c8ijqdcdr8if8sd98rv9kix42gpp5";
       type = "gem";
     };
-    version = "0.1.0.build20180215171152";
+    version = "5.1.2";
+  };
+  opener = {
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "0ngxijhmcfjv23cp3r0lmnrhya37w8p16bandcw28z59ib4crrbz";
+      type = "gem";
+    };
+    version = "0.1.0";
+  };
+  osctl = {
+    dependencies = ["curses" "gli" "highline" "ipaddress" "json" "md2man" "ruby-progressbar" "yard"];
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "0k6c6wzmbgvc2jha4j36126vwjq9g52krqdari492alizfancmiz";
+      type = "gem";
+    };
+    version = "0.1.0.build20180216125625";
+  };
+  redcarpet = {
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "0h9qz2hik4s9knpmbwrzb3jcp3vc5vygp9ya8lcpl7f1l9khmcd7";
+      type = "gem";
+    };
+    version = "3.4.0";
+  };
+  rouge = {
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "1sfhy0xxqjnzqa7qxmpz1bmy0mzcr55qyvi410gsb6d6i4ialbw3";
+      type = "gem";
+    };
+    version = "3.1.1";
   };
   ruby-progressbar = {
     source = {
@@ -55,5 +97,13 @@
       type = "gem";
     };
     version = "1.9.0";
+  };
+  yard = {
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "11x58w0ccayvgy0lmhfyrzxd33ya1v41prh5zzhvaajhw8vr74lh";
+      type = "gem";
+    };
+    version = "0.9.12";
   };
 }
