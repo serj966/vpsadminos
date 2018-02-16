@@ -69,10 +69,10 @@
     dependencies = ["curses" "gli" "highline" "ipaddress" "json" "md2man" "rake" "ruby-progressbar" "yard"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "11nbmx6m5ijqs3934bhaa3ynw3fmsggj661bbzk9rb9pzkckw2lf";
+      sha256 = "0i7gvypwa248narq68lgg4gqrk9nfcdf3fgbac3jcs16j54qwa0f";
       type = "gem";
     };
-    version = "0.1.0.build20180216145345";
+    version = "0.1.0.build20180216153209";
   };
   rake = {
     source = {

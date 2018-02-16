@@ -15,6 +15,7 @@
     osctl
     osctld
     ruby
+    rake
     ];
 
   environment.etc = {

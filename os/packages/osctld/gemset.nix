@@ -27,19 +27,19 @@
     dependencies = ["rake" "yard"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "155f5050m1lzv3bir62r4gbvrx2chnrmj2229q9n8shcglgqpjhm";
+      sha256 = "1r8mcsvvcnvyyr61pv0zfnan05s17ha5yp3nkycxi97wp78cya8k";
       type = "gem";
     };
-    version = "0.1.0.build20180216145345";
+    version = "0.1.0.build20180216153209";
   };
   osctld = {
     dependencies = ["concurrent-ruby" "ipaddress" "json" "libosctl" "rake" "ruby-lxc" "yard"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "0si6kn37n97nkx52gpsd82mal3f2r1spzcvqzad2kmlm4jj02q00";
+      sha256 = "19qchivrg59mnh4707pls3bkcsjc57c6nxla3qgw4grsdb1k6waj";
       type = "gem";
     };
-    version = "0.1.0.build20180216145345";
+    version = "0.1.0.build20180216153209";
   };
   rake = {
     source = {

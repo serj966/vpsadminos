@@ -3,7 +3,7 @@
 bundlerApp {
   pname = "osctl";
   gemdir = ./.;
-  exes = [ "osctl" ];
+  exes = [ "osctl" "osctl-env-exec" ];
   manpages = [ "man8/osctl.8" ];
 
   meta = with lib; {
