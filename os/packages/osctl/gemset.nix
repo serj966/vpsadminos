@@ -66,13 +66,21 @@
     version = "0.1.0";
   };
   osctl = {
-    dependencies = ["curses" "gli" "highline" "ipaddress" "json" "md2man" "ruby-progressbar" "yard"];
+    dependencies = ["curses" "gli" "highline" "ipaddress" "json" "md2man" "rake" "ruby-progressbar" "yard"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "0k6c6wzmbgvc2jha4j36126vwjq9g52krqdari492alizfancmiz";
+      sha256 = "11nbmx6m5ijqs3934bhaa3ynw3fmsggj661bbzk9rb9pzkckw2lf";
       type = "gem";
     };
-    version = "0.1.0.build20180216125625";
+    version = "0.1.0.build20180216145345";
+  };
+  rake = {
+    source = {
+      remotes = ["https://rubygems.vpsfree.cz"];
+      sha256 = "190p7cs8zdn07mjj6xwwsdna3g0r98zs4crz7jh2j2q5b0nbxgjf";
+      type = "gem";
+    };
+    version = "12.3.0";
   };
   redcarpet = {
     source = {

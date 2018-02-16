@@ -4,15 +4,18 @@ GEM
     concurrent-ruby (1.0.5)
     ipaddress (0.8.3)
     json (2.1.0)
-    libosctl (0.1.0.build20180216125625)
+    libosctl (0.1.0.build20180216145345)
+      rake
       yard
-    osctld (0.1.0.build20180216125625)
+    osctld (0.1.0.build20180216145345)
       concurrent-ruby (~> 1.0.5)
       ipaddress (~> 0.8.3)
       json
-      libosctl (= 0.1.0.build20180216125625)
+      libosctl (= 0.1.0.build20180216145345)
+      rake
       ruby-lxc (~> 1.2.2)
       yard
+    rake (12.3.0)
     ruby-lxc (1.2.2)
     yard (0.9.12)
 
@@ -20,7 +23,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  osctld (= 0.1.0.build20180216125625)
+  osctld (= 0.1.0.build20180216145345)
 
 BUNDLED WITH
    1.14.6

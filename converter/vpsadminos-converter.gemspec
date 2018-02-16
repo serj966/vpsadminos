@@ -29,5 +29,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'gli', '~> 2.17.1'
   s.add_runtime_dependency 'ruby-progressbar', '~> 1.9.0'
   s.add_runtime_dependency 'md2man'
+  s.add_runtime_dependency 'rake'
   s.add_runtime_dependency 'yard'
 end
