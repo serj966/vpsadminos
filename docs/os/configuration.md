@@ -4,9 +4,10 @@ vpsAdminOS uses Nix configuration language and re-uses
 number of NixOS modules (e.g. user configuration).
 
 Default and example configs are included in `os/configs/` directory.
-- `make qemu` uses a `default.nix`
-- `make prod` `prod.nix`
-- `make iso-image` uses `iso.nix`
+
+  * `make qemu` uses `default.nix`
+  * `make prod` uses `prod.nix`
+  * `make iso-image` uses `iso.nix`
 
 All of these configs include a `common.nix` file with configuration
 common for all targets. `common.nix` also includes `local.nix` if present.

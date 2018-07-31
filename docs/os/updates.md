@@ -7,8 +7,10 @@ and accepts most of its parameters). You can build `os-rebuild` from `vpsadminos
 make os-rebuild
 ```
 
-which builds `config.system.build.os-rebuild` target. You can then use this tool to upgrade a qemu instance with:
+which builds `config.system.build.os-rebuild` target. You can then use this tool to upgrade a `QEMU` instance with:
 
 ```bash
-NIX_SSHOPTS="-p2222 -i~/.ssh/correctKey" ./result/bin/os-rebuild switch --build-host localhost --target-host root@127.0.0.1
+NIX_SSHOPTS="-p2222 -i~/.ssh/correctKey" ./result/bin/os-rebuild switch \
+  --build-host localhost \
+  --target-host root@127.0.0.1
 ```
