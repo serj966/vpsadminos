@@ -370,6 +370,27 @@ with lib;
         ${lib.concatStringsSep " \\\n  " cfg.qemuParams}
     '';
 
+    system.build.runvmInstaller = pkgs.writeScript "runner" ''
+      #!${pkgs.stdenv.shell}
+      truncate -s${toString cfg.qemuDiskSize}G sda.img
+      truncate -s${toString cfg.qemuDiskSize}G sdb.img
+      truncate -s2G sdc.img
+      exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name vpsadminos -m ${toString cfg.qemuRAM} \
+        -smp cpus=${toString cfg.qemuCpus},cores=${toString cfg.qemuCpuCores},threads=${toString cfg.qemuCpuThreads},sockets=${toString cfg.qemuCpuSockets} \
+        -no-reboot \
+        -device ahci,id=ahci \
+        -drive id=diskA,file=sda.img,if=none \
+        -drive id=diskB,file=sdb.img,if=none \
+        -drive id=diskC,file=sdc.img,if=none \
+        -device ide-drive,drive=diskA,bus=ahci.0 \
+        -device ide-drive,drive=diskB,bus=ahci.1 \
+        -device ide-drive,drive=diskC,bus=ahci.2 \
+        -device virtio-net,netdev=net0 \
+        -netdev user,id=net0,net=10.0.2.0/24,host=10.0.2.2,dns=10.0.2.3,hostfwd=tcp::2222-:22 \
+        -boot menu=on \
+        ${lib.concatStringsSep " \\\n  " cfg.qemuParams}
+    '';
+
     system.build.dist = pkgs.runCommand "vpsadminos-dist" {} ''
       mkdir $out
       cp ${config.system.build.squashfs} $out/root.squashfs

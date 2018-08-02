@@ -50,6 +50,14 @@ iso-local:
 	 -A config.system.build.runvm \
 	 --cores $(CORES) || exit 1
 
+# build installer runner
+installer-local:
+	nix-build \
+	 --arg configuration "{ imports  = [ ./configs/iso.nix ./configs/qemu.nix ]; }" \
+	 --arg vpsadmin "$(VPSADMIN_ABSPATH)" \
+	 -A config.system.build.runvmInstaller \
+	 --cores $(CORES) || exit 1
+
 qemu: build
 	./result
 
@@ -59,6 +67,10 @@ qemu-prod: prod-local
 
 # boot ISO in qemu
 qemu-iso: iso-local
+	./result
+
+# boot ISO in qemu with additional disk
+qemu-installer: installer-local
 	./result
 
 # flash ISO to /dev/disk/by-label/VPSADMINOS_BOOT_CD
