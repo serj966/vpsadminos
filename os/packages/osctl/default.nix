@@ -4,7 +4,11 @@ bundlerApp {
   pname = "osctl";
   gemdir = ./.;
   exes = [ "osctl" "osctl-env-exec" ];
-  manpages = [ "man8/osctl.8" ];
+  gemConfig = {
+    binman = attrs: {
+      dontInstallManpages = true;
+    };
+  };
 
   meta = with lib; {
     description = "";
