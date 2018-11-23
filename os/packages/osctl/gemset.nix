@@ -8,14 +8,6 @@
     };
     version = "5.1.0";
   };
-  curses = {
-    source = {
-      remotes = ["https://rubygems.vpsfree.cz"];
-      sha256 = "0hdgz18a21wi2hg5aw8abc012ni055jr1fbam0v2r8nsqsnx8dy2";
-      type = "gem";
-    };
-    version = "1.2.4";
-  };
   gli = {
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
@@ -66,7 +58,7 @@
     version = "0.1.0";
   };
   osctl = {
-    dependencies = ["curses" "gli" "highline" "ipaddress" "json" "md2man" "rake" "ruby-progressbar" "yard"];
+    dependencies = ["gli" "highline" "ipaddress" "json" "md2man" "rake" "ruby-progressbar" "yard"];
     source = {
       remotes = ["https://rubygems.vpsfree.cz"];
       sha256 = "0i7gvypwa248narq68lgg4gqrk9nfcdf3fgbac3jcs16j54qwa0f";
