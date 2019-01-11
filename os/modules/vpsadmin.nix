@@ -7,9 +7,51 @@ let
 
   cfg = config.vpsadmin;
 
+  allSslOptions = {
+    certfile = "string";
+    keyfile = "string";
+    cacertfile = "string";
+    password = "string";
+    reuse_sessions = "bool";
+    secure_renegotiate = "bool";
+    fail_if_no_peer_cert = "bool";
+    verify = "atom";
+  };
+
+  nixValueToErlang = name: value:
+    let
+      convert = {
+        "bool" = v: if v then "true" else "false";
+        "string" = v: "\"${v}\"";
+        "atom" = v: toString v;
+      };
+    in convert.${allSslOptions.${name}} value;
+
+  sslOptions = attrs: concatStringsSep ",\n" (mapAttrsToList (k: v:
+    "{${k}, ${nixValueToErlang k v}}"
+  ) attrs);
+
+  usedOptions = opts: filterAttrs (k: v: v != null) opts;
+
+  sslConfig = pkgs.writeText "ssl_dist_optfile" ''
+    [
+      {server, [
+        ${sslOptions (usedOptions cfg.ssl.config.server)}
+      ]},
+      {client, [
+        ${sslOptions (usedOptions cfg.ssl.config.client)}
+      ]}
+    ].
+  '';
+
   vmArgs = pkgs.writeText "vm.args" ''
     -name vpsadmin@${config.networking.hostName}
     -setcookie ${cfg.cookie}
+
+    ${optionalString cfg.ssl.enable ''
+    -proto_dist inet_tls
+    -ssl_dist_optfile ${sslConfig}
+    ''}
   '';
 
   appConfig = pkgs.writeText "config.exs" ''
@@ -39,6 +81,7 @@ let
       release :node do
         set version: current_version(:vpsadmin_base)
         set applications: [
+          ${optionalString cfg.ssl.enable ":ssl,"}
           :runtime_tools,
           :vpsadmin_base,
           :vpsadmin_queue,
@@ -51,6 +94,29 @@ let
     releaseName = "node";
     releaseEnv = "node";
   };
+
+  mkSslOption = name:
+    let
+      type = allSslOptions.${name};
+      fn = {
+        string = { type = types.nullOr types.str; };
+        bool = { type = types.nullOr types.bool; };
+        atom = { type = types.nullOr types.str; };
+      };
+    in nameValuePair name (mkOption ({ default = null; } // fn.${type}));
+
+  mkSslOptions = names: listToAttrs (map mkSslOption names);
+
+  mkCommonSslOptions = mkSslOptions [
+    "certfile" "keyfile" "cacertfile" "password" "reuse_sessions"
+    "secure_renegotiate" "verify"
+  ];
+
+  mkServerSslOptions = mkCommonSslOptions // (mkSslOptions [
+    "fail_if_no_peer_cert"
+  ]);
+
+  mkClientSslOptions = mkCommonSslOptions;
 
 in
 
@@ -134,6 +200,26 @@ in
         description = ''
           Long name of the supervisor node.
         '';
+      };
+
+      ssl = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Enable SSL ccomunication between cluster nodes.
+
+            SSL configuration is passed to <literal>erl</literal> as a part of
+            <literal>-ssl_dist_optfile</literal> config.
+            See http://erlang.org/doc/apps/ssl/ssl_distribution.html for
+            more information.
+          '';
+        };
+
+        config = {
+          server = mkServerSslOptions;
+          client = mkClientSslOptions;
+        };
       };
     };
   };
