@@ -96,6 +96,21 @@ let
       ${osctl} pool set parallel-stop ${name} ${toString config.osctl.pools.${name}.parallelStop}
       ''}
 
+      echo "Sharing datasets..."
+      sv check nfsd > /dev/null || exit 1
+
+      datasets="$(zfs list -Hr -o name,mounted ${name} \
+        | grep $'\tyes' `# mounted=yes` \
+        | awk '{ print $1; }')"
+      count=$(echo "$datasets" | wc -l)
+      i=1
+
+      for ds in $datasets ; do
+        echo "[''${i}/''${count}] Sharing $ds"
+        zfs share $ds
+        i=$(($i+1))
+      done
+
       # TODO: this could be option runit.services.<service>.autoRestart = always/on-failure;
       sv once pool-${name}
     '';
