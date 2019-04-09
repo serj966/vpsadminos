@@ -10,8 +10,10 @@ mkDerivation {
     rev = "42be234da6e31ed2dcd05aea7e71f824d5d8ee9c";
     fetchSubmodules = true;
   };
-  isLibrary = true;
+  isLibrary = false;
   isExecutable = true;
+  enableSharedExecutables = false;
+  enableSharedLibraries = false;
   libraryHaskellDepends = [
     aeson async base base64-bytestring bytestring network posix-pty stm
     text
