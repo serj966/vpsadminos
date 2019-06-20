@@ -1,0 +1,3 @@
+#!/bin/sh
+echo 0 > /proc/$$/oom_score_adj
+exec "$@"

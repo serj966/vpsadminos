@@ -108,6 +108,7 @@ module OsCtld
       end
 
       cmd = [
+        OsCtld.bin('osctld-ct-start'),
         'pty-wrapper',
         "#{ct.pool.name}:#{ct.id}",
         Console.socket_path(ct),
@@ -128,6 +129,7 @@ module OsCtld
         ct.user.homedir,
         ct.cgroup_path,
         prlimits: ct.prlimits.export,
+        oom_score_adj: -1000,
       ) do
         r.close
 
