@@ -12,11 +12,11 @@ toplevel:
 	$(MAKE) -C os toplevel
 
 gems:
-	./tools/build_gems.sh "$(MAKE)" $(BUILD_ID) all
+	./tools/with_geminabox.sh $(MAKE) -f Makefile.gems all BUILD_ID=$(BUILD_ID)
 	echo "$(VERSION).build$(BUILD_ID)" > .build_id
 
 osctl-env-exec:
-	./tools/build_gems.sh "$(MAKE)" $(BUILD_ID) osctl-env-exec
+	./tools/with_geminabox.sh $(MAKE) -f Makefile.gems osctl-env-exec BUILD_ID=$(BUILD_ID)
 
 doc:
 	mkdocs build
