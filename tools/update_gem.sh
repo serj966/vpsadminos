@@ -30,3 +30,7 @@ EOF
 [ -f Gemfile.tail ] && cat Gemfile.tail >> Gemfile
 
 bundix -l
+
+popd
+pushd os
+nix-build --attr "$GEM" --no-out-link packages.nix
