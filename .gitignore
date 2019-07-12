@@ -5,5 +5,9 @@ site
 .*.swp
 *.img
 os/configs/local.nix
+os/packages/*/Gemfile
+os/packages/*/Gemfile.lock
+os/packages/*/gemset.nix
+.build_id
 .gems
 shellhook.local.sh

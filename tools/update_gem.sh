@@ -15,13 +15,18 @@ bundle install
 pkg=$(bundle exec rake build | grep -oP "pkg/.+\.gem")
 version=$(echo $pkg | grep -oP "\d+\.\d+\.\d+\.build\d+")
 
-gem inabox "$pkg"
+gem inabox -g "$GEMINABOX_URL" "$pkg"
 
 [ "$PKGS" == "_nopkg" ] && exit
 
 popd
 pushd "$PKGS/$GEM"
 rm -f Gemfile.lock gemset.nix
-sed -ri "s/gem '$GEM'[^$]*/gem '$GEM', '$version'/" Gemfile
+cat <<EOF > Gemfile
+source '$GEMINABOX_URL'
+gem '$GEM', '$version'
+EOF
+
+[ -f Gemfile.tail ] && cat Gemfile.tail >> Gemfile
 
 bundix -l

@@ -1,6 +1,7 @@
-source 'https://rubygems.vpsfree.cz'
+source 'https://rubygems.org'
 gemspec
 
 gem 'libosctl', path: '../libosctl'
 gem 'osctl-repo', path: '../osctl-repo'
 gem 'osup', path: '../osup'
+gem 'netlinkrb', github: 'vpsfreecz/netlinkrb'

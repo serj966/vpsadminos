@@ -2,7 +2,7 @@ BUILD_ID := $(shell date +%Y%m%d%H%M%S)
 VERSION := $(shell cat .version)
 RELEASE_DATE := $(shell date +%Y-%m-%d)
 
-build:
+build: gems
 	$(MAKE) -C os build
 
 qemu:
@@ -11,35 +11,12 @@ qemu:
 toplevel:
 	$(MAKE) -C os toplevel
 
-gems: libosctl osctl-repo osctl osctld osup osctl-image converter svctl
+gems:
+	./tools/build_gems.sh "$(MAKE)" $(BUILD_ID) all
 	echo "$(VERSION).build$(BUILD_ID)" > .build_id
 
-libosctl:
-	./tools/update_gem.sh _nopkg libosctl $(BUILD_ID)
-
-osctl: libosctl
-	./tools/update_gem.sh os/packages osctl $(BUILD_ID)
-
-osctld: libosctl osup
-	./tools/update_gem.sh os/packages osctld $(BUILD_ID)
-
-osctl-repo: libosctl
-	./tools/update_gem.sh os/packages osctl-repo $(BUILD_ID)
-
-osctl-image: libosctl osctl osctl-repo
-	./tools/update_gem.sh os/packages osctl-image $(BUILD_ID)
-
-osup: libosctl
-	./tools/update_gem.sh os/packages osup $(BUILD_ID)
-
-converter: libosctl
-	./tools/update_gem.sh _nopkg converter $(BUILD_ID)
-
-svctl: libosctl
-	./tools/update_gem.sh os/packages svctl $(BUILD_ID)
-
 osctl-env-exec:
-	./tools/update_gem.sh os/packages tools/osctl-env-exec $(BUILD_ID)
+	./tools/build_gems.sh "$(MAKE)" $(BUILD_ID) osctl-env-exec
 
 doc:
 	mkdocs build
@@ -71,5 +48,5 @@ version:
 migration:
 	$(MAKE) -C osup migration
 
-.PHONY: build converter doc doc_serve qemu gems libosctl osctl osctld osctl-repo osup svctl osctl-env-exec
+.PHONY: build doc doc_serve qemu gems osctl-env-exec
 .PHONY: version migration
