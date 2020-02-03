@@ -68,7 +68,10 @@ in {
     boot.kernelPackages = myLinuxPackages;
     boot.kernelModules = hwSupportModules ++ [
       "br_netfilter"
+      "ceph"
       "fuse"
+      "ip_vs"
+      "overlay"
       "veth"
     ];
 
