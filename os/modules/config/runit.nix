@@ -63,10 +63,17 @@ in
     mkdir -p /var/lib/lxc/rootfs
 
     # CGroups
+    ${if config.boot.enableUnifiedCgroupHierarchy then ''
+    mount -t cgroup2 none /sys/fs/cgroup
+    for c in `cat /sys/fs/cgroup/cgroup.controllers` ; do
+      echo "+$c" >> /sys/fs/cgroup/cgroup.subtree_control
+    done
+    '' else ''
     mount -t tmpfs -o uid=0,gid=0,mode=0755 cgroup /sys/fs/cgroup
     mkdir /sys/fs/cgroup/unified
     mount -t cgroup2 none /sys/fs/cgroup/unified
     cgconfigparser -l /etc/cgconfig.conf
+    ''}
 
     # AppArmor
     mount -t securityfs securityfs /sys/kernel/security
