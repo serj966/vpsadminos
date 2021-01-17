@@ -6,6 +6,28 @@ module OsCtld
 
     FS = '/sys/fs/cgroup'
 
+    # @return [1, 2] cgroup hierarchy version
+    def self.version
+      return @version if @version
+
+      begin
+        @version = File.read(RunState::CGROUP_VERSION).strip.to_i
+      rescue Errno::ENOENT
+        @version = 1
+      end
+
+      @version = 1 if ![1, 2].include?(@version)
+      @version
+    end
+
+    def self.v1?
+      version == 1
+    end
+
+    def self.v2?
+      version == 2
+    end
+
     # Convert a single subsystem name to the mountpoint name, because some
     # CGroup subsystems are mounted in a shared mountpoint.
     def self.real_subsystem(subsys)
@@ -17,7 +39,23 @@ module OsCtld
     # Returns a list of mounted CGroup subsystems on the system
     # @return [Array<String>]
     def self.subsystems
-      Dir.entries(FS) - ['.', '..']
+      if v1?
+        Dir.entries(FS) - ['.', '..']
+      else
+        ['']
+      end
+    end
+
+    # Return an absolute path to a cgroup
+    # @param type [String] subsystem
+    # @param path [String]
+    # @return [String]
+    def self.abs_cgroup_path(subsys, *path)
+      if v1?
+        File.join(FS, real_subsystem(subsys), *path)
+      else
+        File.join(FS, *path)
+      end
     end
 
     # Create CGroup a path, optionally chowning the last CGroup or attaching
@@ -63,7 +101,7 @@ module OsCtld
       if chown
         File.chown(chown, chown, cgroup)
 
-        if type == 'unified'
+        if v2? || type == 'unified'
           %w(cgroup.procs cgroup.threads cgroup.subtree_control).each do |f|
             File.chown(chown, chown, File.join(cgroup, f))
           end
@@ -144,7 +182,8 @@ module OsCtld
     # @param subsystem [String]
     # @param path [String] path to remove, relative to the subsystem
     def self.rmpath(subsystem, path)
-      abs_path = File.join(FS, subsystem, path)
+      #abs_path = File.join(FS, subsystem, path)
+      abs_path = abs_cgroup_path(subsystem, path)
 
       # Remove subdirectories recursively
       Dir.entries(abs_path).each do |dir|
@@ -170,7 +209,9 @@ module OsCtld
     # Freeze cgroup at path
     # @param path [String]
     def self.freeze_tree(path)
-      abs_path = File.join(FS, real_subsystem('freezer'), path)
+      # TODO: freezer on cgroupv2
+      #abs_path = File.join(FS, real_subsystem('freezer'), path)
+      abs_path = abs_cgroup_path('freezer', path)
       state = File.join(abs_path, 'freezer.state')
 
       begin
@@ -183,7 +224,9 @@ module OsCtld
     # Thaw all frozen cgroups under path
     # @param path [String]
     def self.thaw_tree(path)
-      abs_path = File.join(FS, real_subsystem('freezer'), path)
+      # TODO: freezer on cgroupv2
+      #abs_path = File.join(FS, real_subsystem('freezer'), path)
+      abs_path = abs_cgroup_path('freezer', path)
 
       Dir.entries(abs_path).each do |dir|
         next if dir == '.' || dir == '..'

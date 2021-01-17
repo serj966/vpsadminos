@@ -7,6 +7,7 @@ module OsCtld
     def execute
       ret = {}
 
+      # TODO: cgroupv2
       %w(cpu cpuacct memory blkio pids).each do |v|
         ret[v] = File.join(CGroup::FS, CGroup.real_subsystem(v))
       end

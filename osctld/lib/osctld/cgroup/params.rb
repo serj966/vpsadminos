@@ -26,6 +26,7 @@ module OsCtld
         p = CGroup::Param.import(hash)
 
         # Check if the subsystem is valid
+        # TODO: cgroupv2
         subsys = CGroup.real_subsystem(p.subsystem)
         path = File.join(CGroup::FS, subsys)
 
