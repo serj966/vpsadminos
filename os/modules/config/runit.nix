@@ -64,7 +64,8 @@ in
 
     ln -sfn /etc/runit/runsvdir/$runlevel /etc/runit/runsvdir/current
     ln -sfn /etc/runit/runsvdir/current /service
-    mkdir /run/service
+    mkdir -p /run/runit /run/runit/service
+    ln -sf /run/runit/service /run/service
 
     # LXC
     mkdir -p /var/lib/lxc/rootfs
@@ -86,12 +87,23 @@ in
         mkdir /sys/fs/cgroup/unified
         mount -t cgroup2 none /sys/fs/cgroup/unified
         cgconfigparser -l /etc/cgconfig.conf
+        mkdir -p /sys/fs/cgroup/systemd/runit
+        ln -sf /sys/fs/cgroup/systemd/runit /run/runit/cgroup.system
+        ln -sf /sys/fs/cgroup/systemd/runit /run/runit/cgroup.service
         ;;
       2)
         mount -t cgroup2 none /sys/fs/cgroup
         for c in `cat /sys/fs/cgroup/cgroup.controllers` ; do
           echo "+$c" >> /sys/fs/cgroup/cgroup.subtree_control
         done
+
+        mkdir -p /sys/fs/cgroup/system/init
+        echo 1 >> /sys/fs/cgroup/system/init/cgroup.procs
+        echo $$ >> /sys/fs/cgroup/system/init/cgroup.procs
+        mkdir -p /sys/fs/cgroup/system/service
+
+        ln -sf /sys/fs/cgroup/system /run/runit/cgroup.system
+        ln -sf /sys/fs/cgroup/system/service /run/runit/cgroup.service
         ;;
     esac
 
